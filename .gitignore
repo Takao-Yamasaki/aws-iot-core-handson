@@ -1,0 +1,5 @@
+iot_handson.pem
+iot_handson.pub.pem
+.terraform
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
