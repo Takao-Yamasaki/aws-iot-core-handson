@@ -1,7 +1,7 @@
 # IoTポリシーの作成
 ## https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/iot_policy
 resource "awscc_iot_policy" "handson" {
-  policy_name = "yamasaki-20240704-policy"
+  policy_name = "h4b-iot-policy-20240710"
   policy_document = jsonencode(
     {
       "Version": "2012-10-17",
@@ -9,41 +9,37 @@ resource "awscc_iot_policy" "handson" {
         {
           "Effect": "Allow",
           "Action": "iot:Connect",
-          "Resource": [
-            "arn:aws:iot:ap-northeast-1:123456789012:client/$${iot:Connection.Thing.ThingName}",
-          ]
+          "Resource": "arn:aws:iot:${local.region}:${local.account_id}:client/$${iot:Connection.Thing.ThingName}"
         },
         {
           "Effect": "Allow",
           "Action": "iot:Publish",
           "Resource": [
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/data/$${iot:Connection.Thing.ThingName}",
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update",
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get"
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/data/$${iot:Connection.Thing.ThingName}",
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update",
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get"
           ]
         },
         {
           "Effect": "Allow",
           "Action": "iot:Receive",
           "Resource": [
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/delta",
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/accepted",
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/rejected",
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/accepted",
-            "arn:aws:iot:ap-northeast-1:123456789012:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/rejected"
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/delta",
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/accepted",
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/rejected",
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/accepted",
+            "arn:aws:iot:${local.region}:${local.account_id}:topic/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/rejected"
           ]
         },
         {
           "Effect": "Allow",
-          "Action": [
-            "iot:Subscribe"
-          ],
+          "Action": "iot:Subscribe",
           "Resource": [
-            "arn:aws:iot:ap-northeast-1:123456789012:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/delta",
-            "arn:aws:iot:ap-northeast-1:123456789012:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/accepted",
-            "arn:aws:iot:ap-northeast-1:123456789012:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/rejected",
-            "arn:aws:iot:ap-northeast-1:123456789012:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/accepted",
-            "arn:aws:iot:ap-northeast-1:123456789012:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/rejected"
+            "arn:aws:iot:${local.region}:${local.account_id}:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/delta",
+            "arn:aws:iot:${local.region}:${local.account_id}:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/accepted",
+            "arn:aws:iot:${local.region}:${local.account_id}:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/update/rejected",
+            "arn:aws:iot:${local.region}:${local.account_id}:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/accepted",
+            "arn:aws:iot:${local.region}:${local.account_id}:topicfilter/$aws/things/$${iot:Connection.Thing.ThingName}/shadow/get/rejected"
           ]
         }
       ]
@@ -51,23 +47,22 @@ resource "awscc_iot_policy" "handson" {
   )
 }
 
-# IoT Thingsの作成
-resource "aws_iot_thing" "handson" {
-  name = "yamasaki-20240704"
+# # モノの作成
+# resource "aws_iot_thing" "handson" {
+#   name = local.project
 
-  attributes = {
-    First = ""
-  }
-}
+#   attributes = {
+#     First = ""
+#   }
+# }
 
-# デバイス証明書の設定
-## https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iot_certificate
-resource "aws_iot_certificate" "handson" {
-  csr = "${file("../iot_handson.pem")}"
-  active = true
-}
+# # デバイス証明書の設定
+# ## https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iot_certificate
+# resource "aws_iot_certificate" "handson" {
+#   active = true
+# }
 
-resource "aws_iot_thing_principal_attachment" "handson" {
-  thing = aws_iot_ca_certificate.handson.name
-  principal = aws_iot_ca_certificate.handson.arn
-}
+# resource "aws_iot_thing_principal_attachment" "handson" {
+#   thing = aws_iot_ca_certificate.handson.name
+#   principal = aws_iot_ca_certificate.handson.arn
+# }
