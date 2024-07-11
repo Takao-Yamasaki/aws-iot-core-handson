@@ -1,6 +1,4 @@
-3d1f06a0300e6fb480c3500ed92e5fc15e7d9157c308f5a23314df6706dd7be0-private.pem.key
-3d1f06a0300e6fb480c3500ed92e5fc15e7d9157c308f5a23314df6706dd7be0-certificate.pem.crt
-3d1f06a0300e6fb480c3500ed92e5fc15e7d9157c308f5a23314df6706dd7be0-public.pem.key
+
 terraform/terraform.tfstate
 terraform/.terraform/providers/registry.terraform.io/hashicorp/awscc/1.4.0/darwin_amd64/terraform-provider-awscc_v1.4.0_x5
 terraform/.terraform/providers/registry.terraform.io/hashicorp/awscc/1.4.0/darwin_amd64/LICENSE.txt
@@ -8,3 +6,7 @@ terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/5.57.0/darwin
 terraform/terraform.tfstate.backup
 terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/5.57.0/darwin_amd64/LICENSE.txt
 Makefile
+.gitignore
+*-private.pem.key
+*-public.pem.key
+*-certificate.pem.crt
