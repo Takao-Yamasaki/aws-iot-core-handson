@@ -5,7 +5,7 @@ terraform/.terraform/providers/registry.terraform.io/hashicorp/awscc/1.4.0/darwi
 terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/5.57.0/darwin_amd64/terraform-provider-aws_v5.57.0_x5
 terraform/terraform.tfstate.backup
 terraform/.terraform/providers/registry.terraform.io/hashicorp/aws/5.57.0/darwin_amd64/LICENSE.txt
-Makefile
+/Makefile
 .gitignore
 *-private.pem.key
 *-public.pem.key
